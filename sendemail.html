@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://smtpjs.com/v2/smtp.js">
+</script>
+	<script>
+		function abc(){
+		var xhttp= new XMLHttpRequest();
+		xhttp.onreadystatechange=function(){
+			if(this.readyState==4 && this.status==200){
+				var obj=JSON.parse(this.responseText);
+				var date=(obj.created_at).split("T");
+				var time=(date[1].split("Z"))[0];
+				var field_1=obj.field1;
+				if(field_1==0){
+					field_1="OFF";
+				}
+				else{
+					field_1="ON";
+				}
+				var field_2=obj.field2;
+				var str=`<h2>Car Maintainance Status as of ${date[0]} <br>
+				Time of taking the reading ${time} <br> The check engine LED is ${field_1} <br> The fuel level is ${field_2}% <br> Nearest Petrol Stations: <a href="https://www.google.com/search?q=nearest+petrol+stations">Click/Tap here</a><br> Nearest Service Stations: <a href="https://www.google.com/search?q=nearest+service+stations">Click/Tap here`;
+				document.write(str);
+				Email.send("rane.tanmay950@gmail.com",
+				"anmolpanjwani0105@gmail.com",
+				`Car Maintainance Status as of ${date[0]}`,
+				`<h1>Time of taking the reading ${time} <br> The check engine LED is ${field_1} <br> The fuel level is ${field_2}% <br> Nearest Petrol Stations: <a href="https://www.google.com/search?q=nearest+petrol+stations">Click/Tap here</a><br> Nearest Service Stations: <a href="https://www.google.com/search?q=nearest+service+stations">Click/Tap here</a>`,
+				"smtp.elasticemail.com",
+				"rane.tanmay950@gmail.com",
+				"2a31f016-ea2a-4911-97d7-789fb95b48ee");
+
+			}
+		};
+		xhttp.open("GET","https://api.thingspeak.com/channels/583279/feeds/last.json?timezone=Asia/Kolkata",true);
+		xhttp.send();
+	}
+	window.onload=abc;
+	</script>
+</head>
+<body>
